@@ -1,5 +1,6 @@
 import { TwitterService } from './twitter';
 import { Feed } from './feed';
+import { RssSheetService } from './rss-sheet';
 
 const twitterKey = 'E0IHMTTkUWw3JQSQ1otgcufXa';
 const twitterSecret = '2WVmWT4gLQgGew918Lm75xmqvCEKZuQBIGb4MrlLnGBI1Vzrru';
@@ -23,6 +24,23 @@ global.index = () => {
     );
   } catch (e) {
     Logger.log(e);
+  }
+};
+
+global.doPost = e => {
+  try {
+    const params = e.parameter;
+    const [feedUrl, title] = params.text.split(' ');
+    const ss = SpreadsheetApp.openById(sheetKey);
+    RssSheetService.insert(ss, feedUrl, title);
+    const response = { text: `${params} completed` };
+    return ContentService.createTextOutput(
+      JSON.stringify(response)
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (e) {
+    return ContentService.createTextOutput(JSON.stringify(e)).setMimeType(
+      ContentService.MimeType.JSON
+    );
   }
 };
 
