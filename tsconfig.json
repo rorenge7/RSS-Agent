@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5", // for Google App Script
+        "lib": [
+            "es2018"
+        ],
+        "outDir": "dist",
+        "baseUrl": "./src",
+        "paths": {
+            "*": [
+                "*"
+            ]
+        },
+        "experimentalDecorators": true,
+        "plugins": [
+            {
+                "name": "typescript-styled-plugin",
+                "lint": {
+                    "compatibleVendorPrefixes": "error",
+                    "float": "error",
+                    "idSelector": "error",
+                    "importStatement": "warn",
+                    "important": "error",
+                    "unknownVendorSpecificProperties": "error",
+                    "zeroUnits": "error"
+                }
+            }
+        ],
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "noUnusedParameters": true,
+        "strictNullChecks": true,
+        "inlineSourceMap": true,
+        "noEmitOnError": true
+    },
+    "include": [
+        "./src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
