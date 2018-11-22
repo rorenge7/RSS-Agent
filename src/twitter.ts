@@ -1,44 +1,58 @@
-declare var TwitterWebService;
+declare var OAuth1;
 
-export class Twitter {
-  private twitter;
-  private service;
-  constructor(key: string, secret: string) {
-    Logger.log('get instance');
-    this.twitter = TwitterWebService.getInstance(
-      key, // 作成したアプリケーションのConsumer Key
-      secret // 作成したアプリケーションのConsumer Secret
+export class TwitterService {
+  static getService(key: string, secret: string) {
+    return (
+      OAuth1.createService('Twitter')
+        // Set the endpoint URLs.
+        .setAccessTokenUrl('https://api.twitter.com/oauth/access_token')
+        .setRequestTokenUrl('https://api.twitter.com/oauth/request_token')
+        .setAuthorizationUrl('https://api.twitter.com/oauth/authorize')
+
+        // Set the consumer key and secret.
+        .setConsumerKey(key)
+        .setConsumerSecret(secret)
+
+        // Set the name of the callback function in the script referenced
+        // above that should be invoked to complete the OAuth flow.
+        .setCallbackFunction('authCallback')
+
+        // Set the property store where authorized tokens should be persisted.
+        .setPropertyStore(PropertiesService.getUserProperties())
     );
-    this.authorize();
-    Logger.log('get service');
-    this.service = this.twitter.getService();
   }
+
   // 認証
-  authorize() {
+  static authorize(twitter) {
     Logger.log('authorize');
-    this.twitter.authorize();
+    const authorizationUrl = twitter.authorize();
+    Logger.log('認証URLは下記です。\n%s', authorizationUrl);
   }
 
-  postUpdateStatus(content: string) {
+  static postUpdateStatus(twitter, content: string) {
     Logger.log('post update status');
-    const response = this.service.fetch(
-      'https://api.twitter.com/1.1/statuses/update.json',
-      {
-        method: 'post',
-        payload: { status: content }
-      }
-    );
+    if (twitter.hasAccess()) {
+      const url = 'https://api.twitter.com/1.1/statuses/update.json';
+      const payload = {
+        status: content
+      };
+      const response = twitter.fetch(url, { payload, method: 'post' });
+      const result = JSON.parse(response.getContentText());
+      Logger.log(JSON.stringify(result, null, 2));
+    }
   }
 
   // 認証解除
-  reset() {
-    Logger.log('reset');
-    this.twitter.reset();
+  static reset(twitter) {
+    twitter.reset();
   }
 
   // 認証後のコールバック
-  authCallback(request) {
-    Logger.log('auth callback');
-    return this.twitter.authCallback(request);
+  static authCallback(twitter, request) {
+    const authorized = twitter.handleCallback(request);
+    if (authorized) {
+      return HtmlService.createHtmlOutput('Success!');
+    }
+    return HtmlService.createHtmlOutput('Denied');
   }
 }
