@@ -2,16 +2,23 @@ import { TwitterService } from './twitter';
 import { Feed } from './feed';
 import { RssSheetService } from './rss-sheet';
 
-const twitterKey = 'E0IHMTTkUWw3JQSQ1otgcufXa';
-const twitterSecret = '2WVmWT4gLQgGew918Lm75xmqvCEKZuQBIGb4MrlLnGBI1Vzrru';
+const props = PropertiesService.getScriptProperties();
+const twitterKey = props.getProperty('TWITTER_KEY');
+const twitterSecret = props.getProperty('TWITTER_SECRET');
 
-const sheetKey = '1iduaoQnAKvlUsN9tquJ8PGvD8B9eqhXR3tuWMO-f8kY';
+const sheetKey = props.getProperty('SHEET_KEY');
 
 declare var global: any;
 
 global.index = () => {
   Logger.log('start index');
   try {
+    if (!twitterKey || !twitterSecret) {
+      throw new Error('twitter key or secret is null');
+    }
+    if (!sheetKey) {
+      throw new Error('sheet key is null');
+    }
     const twitter = TwitterService.getService(twitterKey, twitterSecret);
     Logger.log('get sheets');
     const sheets = SpreadsheetApp.openById(sheetKey).getSheets();
@@ -27,8 +34,11 @@ global.index = () => {
   }
 };
 
-global.doPost = e => {
+global.doPost = (e: any) => {
   try {
+    if (!sheetKey) {
+      throw new Error('sheet key is null');
+    }
     const params = e.parameter;
     const [feedUrl, title] = params.text.split(' ');
     const ss = SpreadsheetApp.openById(sheetKey);
@@ -46,12 +56,19 @@ global.doPost = e => {
 
 global.auth = () => {
   Logger.log('auth');
+  if (!twitterKey || !twitterSecret) {
+    throw new Error('twitter key or secret is null');
+  }
   const twitter = TwitterService.getService(twitterKey, twitterSecret);
   TwitterService.authorize(twitter);
 };
 
-global.authCallback = request => {
+// tslint:disable-next-line
+global.authCallback = (request: any) => {
   Logger.log('auth callback');
+  if (!twitterKey || !twitterSecret) {
+    throw new Error('twitter key or secret is null');
+  }
   const twitter = TwitterService.getService(twitterKey, twitterSecret);
   TwitterService.authCallback(twitter, request);
 };
