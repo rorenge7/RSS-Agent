@@ -2,7 +2,11 @@ export class Feed {
   constructor(public title: string, public url: string, public date: Date) {}
   static buildFromCells(row: Object[]) {
     Logger.log('build from cells');
-    return new Feed(row[0].toString(), row[1].toString(), new Date(row[2].toString()));
+    return new Feed(
+      row[0].toString(),
+      row[1].toString(),
+      new Date(row[2].toString())
+    );
   }
   toShortString() {
     Logger.log('to short string');
@@ -21,10 +25,13 @@ export class Feed {
   // 最新のフィードを取得する
   static getFeedList(
     sheet: GoogleAppsScript.Spreadsheet.Sheet
-  ): { feedList: Feed[]; lastCheckTime: object } {
+  ): { feedList: Feed[]; lastCheckTime: Date } {
     Logger.log('get feed list');
     const values = sheet.getRange(1, 1, 1, 3).getValues();
-    const [url, __, lastCheckTime] = values[0];
+    const [url, __, lastCheckTimeObj] = values[0];
+    const date = new Date(lastCheckTimeObj.toString());
+    const lastCheckTime =
+      date.toString() === 'Invalid Date' ? new Date(0) : date;
     const currentTime = new Date();
     sheet.getRange('C1').setValue(currentTime);
     const lastRow = sheet.getLastRow();
