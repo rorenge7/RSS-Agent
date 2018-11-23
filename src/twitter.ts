@@ -38,7 +38,6 @@ export class TwitterService {
       };
       const response = twitter.fetch(url, { payload, method: 'post' });
       const result = JSON.parse(response.getContentText());
-      Logger.log(JSON.stringify(result, null, 2));
     }
   }
 
