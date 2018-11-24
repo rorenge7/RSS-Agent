@@ -7,14 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --mode=production"
   },
-  "author": "",
+  "author": "ryoto7ishikawa",
   "prettier": {
     "singleQuote": true
   },
   "license": "MIT",
   "devDependencies": {
     "@types/google-apps-script": "0.0.32",
-    "@types/lodash": "^4.14.118",
     "gas-webpack-plugin": "^0.3.0",
     "prettier": "^1.15.2",
     "ts-loader": "^5.3.0",
@@ -26,7 +25,5 @@
     "webpack": "^4.26.0",
     "webpack-cli": "^3.1.2"
   },
-  "dependencies": {
-    "lodash": "^4.17.11"
-  }
+  "dependencies": {}
 }
