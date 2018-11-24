@@ -59,6 +59,7 @@ RSS を登録するには
 1. GAS
    1. GAS プロジェクトを作成します．
    1. 作成したプロジェクトに`./dist/main.gs`を GAS にアップロードします．
+        - claspを用いる場合には，.clasp.jsonを作成してください．
    1. リソースのライブラリに`1CXDCY5sqT9ph64fFwSzVtXnbjpSfWdRymafDrtIZ7Z_hwysTY7IIhi7s`を追加すると OAuth1 が表示されるので，最新バージョンを選びます．
    1. プロジェクトのスクリプトプロパティに追加します． - TWITTER_KEY: Twitter API の key - TWITTER_SECRET: Twitter API の secret - SHEET_KEY: スプレッドシートのキー
       1.auth メソッドを起動するとログに認証用リンクが表示されるので，開いて認証します．
