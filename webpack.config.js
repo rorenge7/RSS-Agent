@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: path.resolve(__dirname, 'src', 'app.ts'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dest'),
     filename: 'main.gs'
   },
   resolve: {
